@@ -14,7 +14,7 @@ default: &default
   encoding: utf8
   pool: 5
   username: roccia
-  password: 000000
+  password: '000000'
   host: localhost
   port: 3306
   encoding: utf8mb4
