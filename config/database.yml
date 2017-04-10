@@ -13,8 +13,8 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
-  username: roccia
-  password: '000000'
+  username: root
+  password: 'Hda123$%^'
   host: localhost
   port: 3306
   encoding: utf8mb4
