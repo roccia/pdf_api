@@ -12,10 +12,10 @@ class CnInfosController < ApplicationController
 
     res =  @cn_info.get_result(stock,industry,plate,report,start_time,end_time)
 
-    if res[:status] == 1
+    if res[:status] == 'success'
        render json: {:status=> 'success', :msg => res[:msg]}
     else
-      render  json: {:status=> 'failed', :msg => 'none'}
+      render  json: {:status=> 'failed', :msg => '爬取失败'}
     end
 
   end

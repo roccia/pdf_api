@@ -142,9 +142,9 @@ class CnInfo < ActiveRecord::Base
           end
           save_to_db(ary)
         end
-       final_result =  {:status => 1, :msg => ary}
+       final_result =  {:status => 'success', :msg => ary}
       else
-        final_result = {:status => -1, :msg => 'failed'}
+        final_result = {:status => 'fail', :msg => 'failed'}
       end
     end
     final_result
