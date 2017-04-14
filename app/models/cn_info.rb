@@ -62,7 +62,7 @@ class CnInfo < ActiveRecord::Base
   }
 
 
-  def self.first_page(stock,industry,plate,report,start_time,end_time)
+  def first_page(stock,industry,plate,report,start_time,end_time)
     params = {
         stock:  stock,
         searchkey: '',
