@@ -2,7 +2,7 @@ class CnInfosController < ApplicationController
 
   def create
     @cn_info = CnInfo.new(cn_info_params)
-    p params
+    Rails.logger.info "controller_params #{params}"
     stock = params[:stock]
     industry = params[:industry]
     plate = params[:plate]
@@ -11,7 +11,7 @@ class CnInfosController < ApplicationController
     end_time = params[:end_time]
 
     res =  @cn_info.get_result(stock,industry,plate,report,start_time,end_time)
-   p res
+    Rails.logger.info "controller_result #{res}"
     if res[:status] == 'success'
        render json: {:status=> 'success', :msg => res[:msg]}
     else

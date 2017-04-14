@@ -77,10 +77,11 @@ class CnInfo < ActiveRecord::Base
         seDate: "#{start_time} ~ #{end_time}"
     }
 
+    Rails.logger.info "###############params #{params}"
     response = RestClient.post(URL, params)
     res = JSON.parse response.body
-    p '#### first_page'
-    p res
+    Rails.logger.info '#### first_page'
+    Rails.logger.info res
     total_num = res["totalAnnouncement"]
     total_num
   end
@@ -111,11 +112,12 @@ class CnInfo < ActiveRecord::Base
           tabName: 'fulltext',
           seDate: "#{start_time} ~ #{end_time}"
       }
+      Rails.logger.info "###############params #{params}"
 
       begin
         response = RestClient.post(URL, params)
       rescue RestClient::ExceptionWithResponse => err
-        p "#############{err.response}############"
+        Rails.logger.info "#############{err.response}############"
       end
 
       rs = JSON.parse response
@@ -128,10 +130,10 @@ class CnInfo < ActiveRecord::Base
           adjunctUrl = s["adjunctUrl"]
           p "$$$$$$$$$$$$ 开始读取PDF $$$$$$$$$$$$$$"
           unless  announcementTitle.include?("摘要")
-            p "#{commpany_name}:#{announcementTitle},地址:#{URL_PERFIX}/#{adjunctUrl}"
-            p "#{URL_PERFIX}/#{adjunctUrl}"
+            Rails.logger.info "#{commpany_name}:#{announcementTitle},地址:#{URL_PERFIX}/#{adjunctUrl}"
+            Rails.logger.info "#{URL_PERFIX}/#{adjunctUrl}"
             content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
-            p "$$$$$$$$$$$$PDF内容为：#{content}$$$$$$$$$$$$$$"
+            Rails.logger.info "$$$$$$$$$$$$PDF内容为：#{content}$$$$$$$$$$$$$$"
             ary << {:industry => industry,
                     :plate => plate,
                     :category => category,
@@ -177,7 +179,7 @@ class CnInfo < ActiveRecord::Base
       cn_info.context = s[:content]
       cn_info.save
     end
-    p "############导入成功，结束！############"
+    Rails.logger.info "############导入成功，结束！############"
   end
 
 
