@@ -62,19 +62,19 @@ class CnInfo < ActiveRecord::Base
   }
 
 
-  def first_page(*arg)
+  def self.first_page(stock,industry,plate,report,start_time,end_time)
     params = {
-        stock:  "#{arg[0]}",
+        stock:  stock,
         searchkey: '',
-        plate: "#{arg[2]}",
-        category: "#{arg[3]}",
-        trade: "#{arg[1]}",
+        plate: plate,
+        category: report,
+        trade: industry,
         column: 'szse_main',
         columnTitle: '历史公告查询',
         pageNum: p,
         pageSize: 50,
         tabName: 'fulltext',
-        seDate: "#{arg[4]} ~ #{arg[5]}"
+        seDate: "#{start_time} ~ #{end_time}"
     }
 
     response = RestClient.post(URL, params)
@@ -85,13 +85,13 @@ class CnInfo < ActiveRecord::Base
     total_num
   end
 
-  def get_result(*arg)
+  def get_result(stock,industry,plate,report,start_time,end_time)
     ary = []
     final_result = ''
-    res = first_page(*arg)
-    industry = arg[1]
-    plate = arg[2]
-    category = arg[3]
+    res = first_page(stock,industry,plate,report,start_time,end_time)
+    industry = industry
+    plate = plate
+    category = report
     if res < 50
       pages = res
     else
@@ -99,17 +99,17 @@ class CnInfo < ActiveRecord::Base
     end
     pages.times do |p|
       params = {
-          stock: "#{arg[0]}",
+          stock: stock,
           searchkey: '',
-          plate: "#{arg[2]}",
-          category: "#{arg[3]}",
-          trade: "#{arg[1]}",
+          plate: plate,
+          category: report,
+          trade: industry,
           column: 'szse_main',
           columnTitle: '历史公告查询',
           pageNum: p,
           pageSize: 50,
           tabName: 'fulltext',
-          seDate: "#{arg[4]} ~ #{arg[5]}"
+          seDate: "#{start_time} ~ #{end_time}"
       }
 
       begin
@@ -179,7 +179,6 @@ class CnInfo < ActiveRecord::Base
     end
     p "############导入成功，结束！############"
   end
-
 
 
 
