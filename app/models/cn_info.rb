@@ -79,6 +79,8 @@ class CnInfo < ActiveRecord::Base
 
     response = RestClient.post(URL, params)
     res = JSON.parse response.body
+    p '#### first_page'
+    p res
     total_num = res["totalAnnouncement"]
     total_num
   end

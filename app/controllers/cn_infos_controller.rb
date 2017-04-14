@@ -11,7 +11,7 @@ class CnInfosController < ApplicationController
     end_time = params[:end_time]
 
     res =  @cn_info.get_result(stock,industry,plate,report,start_time,end_time)
-
+   p res
     if res[:status] == 'success'
        render json: {:status=> 'success', :msg => res[:msg]}
     else
