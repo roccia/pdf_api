@@ -140,7 +140,7 @@ class CnInfo < ActiveRecord::Base
                     :content => content
             }
           end
-          save_to_db(ary)
+          #save_to_db(ary)
         end
        final_result =  {:status => 'success', :msg => ary}
       else
