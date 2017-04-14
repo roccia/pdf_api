@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="99765ae5-d333-4a33-b0d7-6ffed5dcce87" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/cn_infos_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/cn_infos_controller.rb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/cn_info.rb" afterPath="$PROJECT_DIR$/app/models/cn_info.rb" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,21 +22,21 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="cn_info.rb" pinned="false" current-in-tab="false">
+      <file leaf-file-name="cn_info.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/models/cn_info.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="98" column="17" lean-forward="true" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
+            <state relative-caret-position="164">
+              <caret line="95" column="25" lean-forward="true" selection-start-line="95" selection-start-column="10" selection-end-line="95" selection-end-column="25" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cn_infos_controller.rb" pinned="false" current-in-tab="true">
+      <file leaf-file-name="cn_infos_controller.rb" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/cn_infos_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="34" lean-forward="false" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
+            <state relative-caret-position="420">
+              <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -71,8 +70,8 @@
         <option value="$PROJECT_DIR$/Gemfile" />
         <option value="$PROJECT_DIR$/db/migrate/20170327100713_create_cn_infos.rb" />
         <option value="$PROJECT_DIR$/config/database.yml" />
-        <option value="$PROJECT_DIR$/app/models/cn_info.rb" />
         <option value="$PROJECT_DIR$/app/controllers/cn_infos_controller.rb" />
+        <option value="$PROJECT_DIR$/app/models/cn_info.rb" />
       </list>
     </option>
   </component>
@@ -500,12 +499,12 @@
       <workItem from="1491886360261" duration="2237000" />
       <workItem from="1492060950946" duration="2865000" />
       <workItem from="1492136503009" duration="1565000" />
-      <workItem from="1492165216453" duration="1722000" />
+      <workItem from="1492165216453" duration="1909000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25700000" />
+    <option name="totallyTimeSpent" value="25887000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="77" y="23" width="1496" height="1074" extended-state="0" />
@@ -903,18 +902,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/cn_info.rb">
+    <entry file="file://$PROJECT_DIR$/app/controllers/cn_infos_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="98" column="17" lean-forward="true" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
+        <state relative-caret-position="420">
+          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/cn_infos_controller.rb">
+    <entry file="file://$PROJECT_DIR$/app/models/cn_info.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="34" lean-forward="false" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
+        <state relative-caret-position="164">
+          <caret line="95" column="25" lean-forward="true" selection-start-line="95" selection-start-column="10" selection-end-line="95" selection-end-column="25" />
           <folding />
         </state>
       </provider>

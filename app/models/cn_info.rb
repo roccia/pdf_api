@@ -93,9 +93,8 @@ class CnInfo < ActiveRecord::Base
     industry = industry
     plate = plate
     category = report
-    if res =0
-      final_result = {status:0,msg:'无数据'}
-    elsif res < 50
+    return  {status:0,msg:'无数据'} if res == 0
+    if res < 50
       pages = res
     else
       pages = (res/50.to_f).round
