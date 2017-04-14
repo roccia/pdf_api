@@ -62,9 +62,9 @@ class CnInfo < ActiveRecord::Base
   }
 
 
-  def first_page(stock,industry,plate,report,start_time,end_time)
+  def first_page(stock, industry, plate, report, start_time, end_time)
     params = {
-        stock:  stock,
+        stock: stock,
         searchkey: '',
         plate: plate,
         category: report,
@@ -86,14 +86,16 @@ class CnInfo < ActiveRecord::Base
     total_num
   end
 
-  def get_result(stock,industry,plate,report,start_time,end_time)
+  def get_result(stock, industry, plate, report, start_time, end_time)
     ary = []
     final_result = ''
-    res = first_page(stock,industry,plate,report,start_time,end_time)
+    res = first_page(stock, industry, plate, report, start_time, end_time)
     industry = industry
     plate = plate
     category = report
-    if res < 50
+    if res =0
+      final_result = {status:0,msg:'无数据'}
+    elsif res < 50
       pages = res
     else
       pages = (res/50.to_f).round
@@ -129,7 +131,7 @@ class CnInfo < ActiveRecord::Base
           commpany_name = s["secName"]
           adjunctUrl = s["adjunctUrl"]
           p "$$$$$$$$$$$$ 开始读取PDF $$$$$$$$$$$$$$"
-          unless  announcementTitle.include?("摘要")
+          unless announcementTitle.include?("摘要")
             Rails.logger.info "#{commpany_name}:#{announcementTitle},地址:#{URL_PERFIX}/#{adjunctUrl}"
             Rails.logger.info "#{URL_PERFIX}/#{adjunctUrl}"
             content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
@@ -146,7 +148,7 @@ class CnInfo < ActiveRecord::Base
           end
           save_to_db(ary)
         end
-       final_result =  {:status => 'success', :msg => ary}
+        final_result = {:status => 'success', :msg => ary}
       else
         final_result = {:status => 'fail', :msg => 'failed'}
       end
@@ -157,13 +159,13 @@ class CnInfo < ActiveRecord::Base
   def read_pdf(url)
     content_ary = []
     p 'start reading '
-      io = open(url)
-      reader = PDF::Reader.new(io)
-      reader.pages.each do |page|
-        content = page.text
-        content_ary << content
-      end
-      content_ary
+    io = open(url)
+    reader = PDF::Reader.new(io)
+    reader.pages.each do |page|
+      content = page.text
+      content_ary << content
+    end
+    content_ary
   end
 
   def save_to_db(res)
@@ -171,9 +173,9 @@ class CnInfo < ActiveRecord::Base
     res.each do |s|
       cn_info.industry = s[:industry]
       cn_info.category = s[:category]
-      cn_info.plate  = s[:plate]
-      cn_info.title  =  s[:title]
-      cn_info.company_code =  s[:code]
+      cn_info.plate = s[:plate]
+      cn_info.title = s[:title]
+      cn_info.company_code = s[:code]
       cn_info.company_name = s[:name]
       cn_info.url = s[:url]
       cn_info.context = s[:content]
@@ -181,8 +183,6 @@ class CnInfo < ActiveRecord::Base
     end
     Rails.logger.info "############导入成功，结束！############"
   end
-
-
 
 
 end

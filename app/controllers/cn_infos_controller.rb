@@ -12,7 +12,9 @@ class CnInfosController < ApplicationController
 
     res =  @cn_info.get_result(stock,industry,plate,report,start_time,end_time)
     Rails.logger.info "controller_result #{res}"
-    if res[:status] == 'success'
+    if res[:status] == 0
+      render  json: {:status=> 'no_data', :msg => '无数据'}
+    elsif res[:status] == 'success'
        render json: {:status=> 'success', :msg => res[:msg]}
     else
       render  json: {:status=> 'failed', :msg => '爬取失败'}
