@@ -64,7 +64,7 @@ class CnInfo < ActiveRecord::Base
 
   def first_page(*arg)
     params = {
-        stock:  arg[0],
+        stock:  "#{arg[0]}",
         searchkey: '',
         plate: "#{arg[2]}",
         category: "#{arg[3]}",
@@ -97,7 +97,7 @@ class CnInfo < ActiveRecord::Base
     end
     pages.times do |p|
       params = {
-          stock: arg[0],
+          stock: "#{arg[0]}",
           searchkey: '',
           plate: "#{arg[2]}",
           category: "#{arg[3]}",
