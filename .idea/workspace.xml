@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="99765ae5-d333-4a33-b0d7-6ffed5dcce87" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/pdf_api.iml" afterPath="$PROJECT_DIR$/.idea/pdf_api.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/cn_info.rb" afterPath="$PROJECT_DIR$/app/models/cn_info.rb" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,8 +24,8 @@
       <file leaf-file-name="cn_info.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/models/cn_info.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="489">
-              <caret line="182" column="36" lean-forward="true" selection-start-line="182" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+            <state relative-caret-position="478">
+              <caret line="105" column="23" lean-forward="true" selection-start-line="105" selection-start-column="23" selection-end-line="105" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -482,12 +480,12 @@
       <workItem from="1492060950946" duration="2865000" />
       <workItem from="1492136503009" duration="1565000" />
       <workItem from="1492165216453" duration="2067000" />
-      <workItem from="1492421271473" duration="357000" />
+      <workItem from="1492421271473" duration="513000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26402000" />
+    <option name="totallyTimeSpent" value="26558000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="77" y="23" width="1496" height="1074" extended-state="0" />
@@ -889,8 +887,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models/cn_info.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="182" column="36" lean-forward="true" selection-start-line="182" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+        <state relative-caret-position="478">
+          <caret line="105" column="23" lean-forward="true" selection-start-line="105" selection-start-column="23" selection-end-line="105" selection-end-column="23" />
           <folding />
         </state>
       </provider>
