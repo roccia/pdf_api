@@ -1,5 +1,6 @@
 require 'json'
 require 'open-uri'
+require 'zlib'
 
 class CnInfo < ActiveRecord::Base
   validates_uniqueness_of :url
@@ -132,7 +133,7 @@ class CnInfo < ActiveRecord::Base
                       :code => commpany_code,
                       :name => commpany_name,
                       :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                      :content => content
+                      :content => Zlib::Deflate.deflate(content)
               }
             end
             save_to_db(ary)
