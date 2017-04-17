@@ -159,7 +159,7 @@ class CnInfo < ActiveRecord::Base
     reader.pages.each do |page|
       res = page.text
       content = Base64.encode64(Zlib::Deflate.deflate(res))
-      Rails.logger "content size ########## #{c.size}"
+      Rails.logger "content size ########## #{res.size}"
       Rails.logger "content size ########## #{content.size}"
       content_ary << content
     end
