@@ -157,8 +157,9 @@ class CnInfo < ActiveRecord::Base
     io = open(url)
     reader = PDF::Reader.new(io)
     reader.pages.each do |page|
-      content = Base64.encode64(Zlib::Deflate.deflate(page.text))
-      Rails.logger "content size ########## #{page.text.size}"
+      res = page.text
+      content = Base64.encode64(Zlib::Deflate.deflate(res))
+      Rails.logger "content size ########## #{c.size}"
       Rails.logger "content size ########## #{content.size}"
       content_ary << content
     end
