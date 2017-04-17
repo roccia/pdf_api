@@ -135,9 +135,9 @@ class CnInfo < ActiveRecord::Base
                       :content => content
               }
             end
-            save_to_db(ary.uniq)
+            save_to_db(ary)
           end
-          final_result = {:status => 'success', :msg => ary}
+          final_result = {:status => 'success', :msg => ary.uniq}
         else
           final_result = {:status => 'fail', :msg => 'failed'}
         end
