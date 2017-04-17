@@ -135,7 +135,7 @@ class CnInfo < ActiveRecord::Base
                       :code => commpany_code,
                       :name => commpany_name,
                       :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                      :content => Base64.encode64(Zlib::Deflate.deflate(content))
+                      :content => content
               }
             end
             save_to_db(ary)
@@ -157,7 +157,7 @@ class CnInfo < ActiveRecord::Base
     io = open(url)
     reader = PDF::Reader.new(io)
     reader.pages.each do |page|
-      content = page.text
+      content = Base64.encode64(Zlib::Deflate.deflate(page.text))
       content_ary << content
     end
     content_ary
