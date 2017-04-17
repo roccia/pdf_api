@@ -62,30 +62,6 @@ class CnInfo < ActiveRecord::Base
   }
 
 
-  def first_page(stock, industry, plate, report, start_time, end_time)
-    params = {
-        stock: stock,
-        searchkey: '',
-        plate: plate,
-        category: report,
-        trade: industry,
-        column: 'szse_main',
-        columnTitle: '历史公告查询',
-        pageNum: p,
-        pageSize: 50,
-        tabName: 'fulltext',
-        seDate: "#{start_time} ~ #{end_time}"
-    }
-
-    Rails.logger.info "###############params #{params}"
-    response = RestClient.post(URL, params)
-    res = JSON.parse response.body
-    Rails.logger.info '#### first_page'
-    Rails.logger.info res
-    total_num = res["totalAnnouncement"]
-    total_num
-  end
-
   def get_result(stock, industry, plate, report, start_time, end_time)
     params = {
         stock: stock,
@@ -106,7 +82,7 @@ class CnInfo < ActiveRecord::Base
     Rails.logger.info '#### first_page #{res}'
      page_num = res["totalAnnouncement"]
     return  {status:0,msg:'无数据'} if page_num == 0
-    if res < 50
+    if page_num < 50
        query(page_num,stock, industry, plate, report, start_time, end_time)
     else
       pages = (page_num/50.to_f).round
