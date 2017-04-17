@@ -122,13 +122,14 @@ class CnInfo < ActiveRecord::Base
       end
 
       rs = JSON.parse response
-      if rs.present?
+       if rs.present?
         p '############查询开始############'
         rs["announcements"].each do |s|
           announcementTitle = s["announcementTitle"]
           commpany_code = s["secCode"]
           commpany_name = s["secName"]
           adjunctUrl = s["adjunctUrl"]
+          time = s["announcementTime"]
           p "$$$$$$$$$$$$ 开始读取PDF $$$$$$$$$$$$$$"
           unless announcementTitle.include?("摘要")
             Rails.logger.info "#{commpany_name}:#{announcementTitle},地址:#{URL_PERFIX}/#{adjunctUrl}"
@@ -139,6 +140,7 @@ class CnInfo < ActiveRecord::Base
                     :plate => plate,
                     :category => category,
                     :title => announcementTitle,
+                    :report_date => Time.at(time/1000),
                     :code => commpany_code,
                     :name => commpany_name,
                     :url => "#{URL_PERFIX}/#{adjunctUrl}",
@@ -168,17 +170,18 @@ class CnInfo < ActiveRecord::Base
   end
 
   def save_to_db(res)
-    cn_info = CnInfo.new
+
     res.each do |s|
-      cn_info.industry = s[:industry]
-      cn_info.category = s[:category]
-      cn_info.plate = s[:plate]
-      cn_info.title = s[:title]
-      cn_info.company_code = s[:code]
-      cn_info.company_name = s[:name]
-      cn_info.url = s[:url]
-      cn_info.context = s[:content]
-      cn_info.save
+      self.industry = s[:industry]
+      self.category = s[:category]
+      self.plate = s[:plate]
+      self.title = s[:title]
+      self.company_code = s[:code]
+      self.company_name = s[:name]
+      self.url = s[:url]
+      self.context = s[:content]
+      self.report_date = s[:report_date]
+      self.save
     end
     Rails.logger.info "############导入成功，结束！############"
   end
