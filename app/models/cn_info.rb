@@ -62,7 +62,7 @@ class CnInfo < ActiveRecord::Base
   }
 
 
-  def first_page(stock, industry, plate, report, start_time, end_time)
+  def get_result(stock, industry, plate, report, start_time, end_time)
     params = {
         stock: stock,
         searchkey: '',
@@ -77,28 +77,27 @@ class CnInfo < ActiveRecord::Base
         seDate: "#{start_time} ~ #{end_time}"
     }
 
-    Rails.logger.info "###############params #{params}"
     response = RestClient.post(URL, params)
     res = JSON.parse response.body
-    Rails.logger.info '#### first_page'
-    Rails.logger.info res
-    total_num = res["totalAnnouncement"]
-    total_num
+    Rails.logger.info '#### first_page #{res}'
+     page_num = res["totalAnnouncement"]
+
+    return  {status:0,msg:'无数据'} if page_num == 0
+    if page_num < 50
+       query(page_num,stock, industry, plate, report, start_time, end_time)
+    else
+      pages = (page_num/50.to_f).round
+      query(pages,stock, industry, plate, report, start_time, end_time)
+    end
+
   end
 
-  def get_result(stock, industry, plate, report, start_time, end_time)
+  def query(pages,stock, industry, plate, report, start_time, end_time)
     ary = []
     final_result = ''
-    res = first_page(stock, industry, plate, report, start_time, end_time)
     industry = industry
     plate = plate
     category = report
-    return  {status:0,msg:'无数据'} if res == 0
-    if res < 50
-      pages = res
-    else
-      pages = (res/50.to_f).round
-    end
     pages.times do |p|
       params = {
           stock: stock,
@@ -113,45 +112,38 @@ class CnInfo < ActiveRecord::Base
           tabName: 'fulltext',
           seDate: "#{start_time} ~ #{end_time}"
       }
-      Rails.logger.info "###############params #{params}"
-
-      begin
+       begin
         response = RestClient.post(URL, params)
+        rs = JSON.parse response
+        Rails.logger.info "Response ###############  #{rs}"
+        if rs.present?
+          rs["announcements"].each do |s|
+            announcementTitle = s["announcementTitle"]
+            commpany_code = s["secCode"]
+            commpany_name = s["secName"]
+            adjunctUrl = s["adjunctUrl"]
+            time = s["announcementTime"]
+            unless announcementTitle.include?("摘要")
+              content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
+              ary << {:industry => industry,
+                      :plate => plate,
+                      :category => category,
+                      :title => announcementTitle,
+                      :report_date => Time.at(time/1000),
+                      :code => commpany_code,
+                      :name => commpany_name,
+                      :url => "#{URL_PERFIX}/#{adjunctUrl}",
+                      :content => content
+              }
+            end
+            save_to_db(ary)
+          end
+          final_result = {:status => 'success', :msg => ary}
+        else
+          final_result = {:status => 'fail', :msg => 'failed'}
+        end
       rescue RestClient::ExceptionWithResponse => err
         Rails.logger.info "#############{err.response}############"
-      end
-
-      rs = JSON.parse response
-       if rs.present?
-        p '############查询开始############'
-        rs["announcements"].each do |s|
-          announcementTitle = s["announcementTitle"]
-          commpany_code = s["secCode"]
-          commpany_name = s["secName"]
-          adjunctUrl = s["adjunctUrl"]
-          time = s["announcementTime"]
-          p "$$$$$$$$$$$$ 开始读取PDF $$$$$$$$$$$$$$"
-          unless announcementTitle.include?("摘要")
-            Rails.logger.info "#{commpany_name}:#{announcementTitle},地址:#{URL_PERFIX}/#{adjunctUrl}"
-            Rails.logger.info "#{URL_PERFIX}/#{adjunctUrl}"
-            content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
-            Rails.logger.info "$$$$$$$$$$$$PDF内容为：#{content}$$$$$$$$$$$$$$"
-            ary << {:industry => industry,
-                    :plate => plate,
-                    :category => category,
-                    :title => announcementTitle,
-                    :report_date => Time.at(time/1000),
-                    :code => commpany_code,
-                    :name => commpany_name,
-                    :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                    :content => content
-            }
-          end
-          save_to_db(ary)
-        end
-        final_result = {:status => 'success', :msg => ary}
-      else
-        final_result = {:status => 'fail', :msg => 'failed'}
       end
     end
     final_result
