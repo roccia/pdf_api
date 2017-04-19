@@ -124,9 +124,9 @@ class CnInfo < ActiveRecord::Base
             commpany_code = s["secCode"]
             commpany_name = s["secName"]
             adjunctUrl = s["adjunctUrl"]
-            time = s["announcementTime"]
+             time = s["announcementTime"]
             unless announcementTitle.include?("摘要")
-              content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
+              #content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
               ary << {:industry => industry,
                       :plate => plate,
                       :category => category,
@@ -135,10 +135,9 @@ class CnInfo < ActiveRecord::Base
                       :code => commpany_code,
                       :name => commpany_name,
                       :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                      :content => content
+                      #:content => content
               }
             end
-            save_to_db(ary)
           end
           final_result = {:status => 'success', :msg => ary.uniq}
         else
@@ -149,6 +148,13 @@ class CnInfo < ActiveRecord::Base
       end
     end
     final_result
+  end
+
+
+  def read_pdf_ary(ary)
+    Parallel.map(ary, in_processes: 10) { |a|
+          read_pdf(a[:url])
+        }
   end
 
   def read_pdf(url)
@@ -167,7 +173,6 @@ class CnInfo < ActiveRecord::Base
   end
 
   def save_to_db(res)
-
     res.each do |s|
       self.industry = s[:industry]
       self.category = s[:category]
@@ -176,12 +181,11 @@ class CnInfo < ActiveRecord::Base
       self.company_code = s[:code]
       self.company_name = s[:name]
       self.url = s[:url]
-      self.context = s[:content]
+      #self.context = s[:content]
       self.report_date = s[:report_date]
       self.save
     end
-    Rails.logger.info "############导入成功，结束！############"
-  end
+   end
 
 
 end

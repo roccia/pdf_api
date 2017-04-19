@@ -15,6 +15,11 @@ class CnInfosController < ApplicationController
     if res[:status] == 0
       render  json: {:status=> 'no_data', :msg => '无数据'}
     elsif res[:status] == 'success'
+       @cn_info.save_to_db(res[:msg])
+       content =  @cn_info.read_pdf_ary(res[:msg])  #content arry
+       content.each{|c| @cn_info.context = c
+                        @cn_info.save }
+
        render json: {:status=> 'success', :msg => res[:msg]}
     else
       render  json: {:status=> 'failed', :msg => '爬取失败'}

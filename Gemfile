@@ -41,3 +41,5 @@ gem 'rest-client'
 gem 'pdf-reader'
 
 gem 'thin'
+
+gem 'parallel'
