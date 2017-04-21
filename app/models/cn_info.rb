@@ -89,70 +89,69 @@ class CnInfo < ActiveRecord::Base
        query(page_num,stock, industry, plate, report, start_time, end_time)
     else
       pages = (page_num/50.to_f).round
-      p_ary = []
-      pages.times{|p| p_ary<< p}
-      Parallel.map(p_ary, in_processes: 10){|page|
-        query(page,stock, industry, plate, report, start_time, end_time)
-      }
+      query(pages,stock, industry, plate, report, start_time, end_time)
     end
+
   end
 
-  def query(page,stock, industry, plate, report, start_time, end_time)
+  def query(pages,stock, industry, plate, report, start_time, end_time)
     ary = []
     final_result = ''
-    # industry = industry
-    # plate = plate
-    # category = report
-    params = {
-        stock: stock,
-        searchkey: '',
-        plate: plate,
-        category: report,
-        trade: industry,
-        column: 'szse_main',
-        columnTitle: '历史公告查询',
-        pageNum: page,
-        pageSize: 50,
-        tabName: 'fulltext',
-        seDate: "#{start_time} ~ #{end_time}"
-    }
-    begin
-      response = RestClient.post(URL, params)
-      rs = JSON.parse response
-      Rails.logger.info "Response ###############  #{rs}"
-      if rs.present?
-        rs["announcements"].each do |s|
-          announcementTitle = s["announcementTitle"]
-          commpany_code = s["secCode"]
-          commpany_name = s["secName"]
-          adjunctUrl = s["adjunctUrl"]
-          time = s["announcementTime"]
-          unless announcementTitle.include?("摘要")
-            content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
-            ary << {:industry => industry,
-                    :plate => plate,
-                    :category => report,
-                    :title => announcementTitle,
-                    :report_date => Time.at(time/1000),
-                    :code => commpany_code,
-                    :name => commpany_name,
-                    :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                    :content => content
-            }
+    industry = industry
+    plate = plate
+    category = report
+    pages.times do |p|
+      params = {
+          stock: stock,
+          searchkey: '',
+          plate: plate,
+          category: report,
+          trade: industry,
+          column: 'szse_main',
+          columnTitle: '历史公告查询',
+          pageNum: p,
+          pageSize: 50,
+          tabName: 'fulltext',
+          seDate: "#{start_time} ~ #{end_time}"
+      }
+       begin
+        response = RestClient.post(URL, params)
+        rs = JSON.parse response
+        Rails.logger.info "Response ###############  #{rs}"
+        if rs.present?
+          rs["announcements"].each do |s|
+            announcementTitle = s["announcementTitle"]
+            commpany_code = s["secCode"]
+            commpany_name = s["secName"]
+            adjunctUrl = s["adjunctUrl"]
+             time = s["announcementTime"]
+            unless announcementTitle.include?("摘要")
+              content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
+              ary << {:industry => industry,
+                      :plate => plate,
+                      :category => category,
+                      :title => announcementTitle,
+                      :report_date => Time.at(time/1000),
+                      :code => commpany_code,
+                      :name => commpany_name,
+                      :url => "#{URL_PERFIX}/#{adjunctUrl}",
+                      :content => content
+              }
+            end
           end
+          save_to_db(ary)
+          final_result = {:status => 'success', :msg => ary.uniq}
+        else
+          final_result = {:status => 'fail', :msg => 'failed'}
         end
-        final_result = {:status => 'success', :msg => ary.uniq}
-      else
-        final_result = {:status => 'fail', :msg => 'failed'}
+      rescue RestClient::ExceptionWithResponse => err
+        Rails.logger.info "#############{err.response}############"
       end
-    rescue RestClient::ExceptionWithResponse => err
-      Rails.logger.info "#############{err.response}############"
     end
-
-   puts  final_result
+    final_result
   end
 
-  #
+
   # def read_pdf_ary(ary)
   #   Parallel.map(ary, in_processes: 10) { |a|
   #         read_pdf(a[:url])
@@ -166,6 +165,8 @@ class CnInfo < ActiveRecord::Base
     reader = PDF::Reader.new(io)
     reader.pages.each do |page|
       content = Base64.encode64(Zlib::Deflate.deflate(page.text))
+      Rails.logger.info " page size ########## #{page.text.size}"
+      Rails.logger.info "content size ########## #{content.size}"
 
       content_ary << content
     end
