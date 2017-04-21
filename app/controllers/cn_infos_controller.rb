@@ -20,7 +20,7 @@ class CnInfosController < ApplicationController
       content.each{|c| @cn_info.context = c
       @cn_info.save }
 
-      render json: {:status=> 'success', :msg => res[:msg]}
+      render json: {:status=> 'success' }
     else
       render  json: {:status=> 'failed', :msg => '爬取失败'}
     end
