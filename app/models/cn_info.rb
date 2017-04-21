@@ -149,7 +149,7 @@ class CnInfo < ActiveRecord::Base
       Rails.logger.info "#############{err.response}############"
     end
 
-    final_result
+   puts  final_result
   end
 
   #
