@@ -80,13 +80,13 @@ class CnInfo < ActiveRecord::Base
         seDate: "#{start_time} ~ #{end_time}"
     }
 
-     response = RestClient.post(URL, params)
+    response = RestClient.post(URL, params)
     res = JSON.parse response.body
     Rails.logger.info '#### first_page #{res}'
-     page_num = res["totalAnnouncement"]
+    page_num = res["totalAnnouncement"]
     return  {status:0,msg:'无数据'} if page_num == 0
     if page_num < 50
-       query(page_num,stock, industry, plate, report, start_time, end_time)
+      query(page_num,stock, industry, plate, report, start_time, end_time)
     else
       pages = (page_num/50.to_f).round
       query(pages,stock, industry, plate, report, start_time, end_time)
@@ -114,7 +114,7 @@ class CnInfo < ActiveRecord::Base
           tabName: 'fulltext',
           seDate: "#{start_time} ~ #{end_time}"
       }
-       begin
+      begin
         response = RestClient.post(URL, params)
         rs = JSON.parse response
         Rails.logger.info "Response ###############  #{rs}"
@@ -124,9 +124,10 @@ class CnInfo < ActiveRecord::Base
             commpany_code = s["secCode"]
             commpany_name = s["secName"]
             adjunctUrl = s["adjunctUrl"]
-             time = s["announcementTime"]
+            time = s["announcementTime"]
             unless announcementTitle.include?("摘要")
-              content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
+              #content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
+
               ary << {:industry => industry,
                       :plate => plate,
                       :category => category,
@@ -135,11 +136,10 @@ class CnInfo < ActiveRecord::Base
                       :code => commpany_code,
                       :name => commpany_name,
                       :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                      :content => content
+                      #:content => content
               }
             end
           end
-          save_to_db(ary)
           final_result = {:status => 'success', :msg => ary.uniq}
         else
           final_result = {:status => 'fail', :msg => 'failed'}
@@ -152,11 +152,11 @@ class CnInfo < ActiveRecord::Base
   end
 
 
-  # def read_pdf_ary(ary)
-  #   Parallel.map(ary, in_processes: 10) { |a|
-  #         read_pdf(a[:url])
-  #       }
-  # end
+  def read_pdf_ary(ary)
+    Parallel.map(ary, in_processes: 10) { |a|
+      read_pdf(a[:url])
+    }
+  end
 
   def read_pdf(url)
     content_ary = []
@@ -182,11 +182,11 @@ class CnInfo < ActiveRecord::Base
       self.company_code = s[:code]
       self.company_name = s[:name]
       self.url = s[:url]
-      self.context = s[:content]
+      #self.context = s[:content]
       self.report_date = s[:report_date]
       self.save
     end
-   end
+  end
 
 
 end
