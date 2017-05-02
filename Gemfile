@@ -40,6 +40,8 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'rest-client'
 gem 'pdf-reader'
 
+gem 'mina'
+
 gem 'thin'
 
 gem 'parallel'
