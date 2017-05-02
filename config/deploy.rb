@@ -102,7 +102,7 @@ task :deploy => :environment do
        # command %{touch tmp/restart.txt}
       end
     end
-  end
+
 
   # you can use `run :local` to run tasks on local machine before of after the deploy scripts
   # run(:local){ say 'done' }
