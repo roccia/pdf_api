@@ -25,7 +25,7 @@ set :branch, 'master'
 # shared dirs and files will be symlinked into the app-folder by the 'deploy:link_shared_paths' step.
 # set :shared_dirs, fetch(:shared_dirs, []).push('somedir')
 #set :shared_files, fetch(:shared_files, []).push('config/database.yml', 'config/secrets.yml')
-set :shared_paths, ['config/database.yml', 'log', 'config/secrets.yml']
+set :shared_paths, ['config/mongoid.yml', 'config/application.yml', 'log']
 # This task is the environment that is loaded for all remote run commands, such as
 # `mina deploy` or `mina rake`.
 task :environment do
@@ -40,41 +40,21 @@ end
 # Put any custom commands you need to run at setup
 # All paths in `shared_dirs` and `shared_paths` will be created on their own.
 task :setup => :environment do
-     # command %{rbenv install 2.3.0}
-     # 在服务器项目目录的shared中创建log文件夹
-  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/log"]
-  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/log"]
+  queue! %[mkdir -p "#{deploy_to}/shared/log"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/log"]
 
-  # 在服务器项目目录的shared中创建config文件夹 下同
-  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/config"]
-  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/config"]
+  queue! %[mkdir -p "#{deploy_to}/shared/config"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/config"]
 
-  queue! %[touch "#{deploy_to}/#{shared_path}/config/database.yml"]
-  queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
-
-  # puma.rb 配置puma必须得文件夹及文件
   queue! %[mkdir -p "#{deploy_to}/shared/tmp/pids"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/tmp"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/tmp/pids"]
 
   queue! %[mkdir -p "#{deploy_to}/shared/tmp/sockets"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/tmp/sockets"]
 
-  queue! %[touch "#{deploy_to}/shared/config/puma.rb"]
-  queue  %[echo "-----> Be sure to edit 'shared/config/puma.rb'."]
-
-  # tmp/sockets/puma.state
-  queue! %[touch "#{deploy_to}/shared/tmp/sockets/puma.state"]
-  queue  %[echo "-----> Be sure to edit 'shared/tmp/sockets/puma.state'."]
-
-  # log/puma.stdout.log
-  queue! %[touch "#{deploy_to}/shared/log/puma.stdout.log"]
-  queue  %[echo "-----> Be sure to edit 'shared/log/puma.stdout.log'."]
-
-  # log/puma.stdout.log
-  queue! %[touch "#{deploy_to}/shared/log/puma.stderr.log"]
-  queue  %[echo "-----> Be sure to edit 'shared/log/puma.stderr.log'."]
-
-  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml'."]
+  queue! %[touch "#{deploy_to}/shared/config/mongoid.yml"]
+  queue! %[touch "#{deploy_to}/shared/config/application.yml"]
 end
 
 desc "Deploys the current version to the server."
