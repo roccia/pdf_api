@@ -10,19 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170327100713) do
+ActiveRecord::Schema.define(version: 20170417093523) do
 
   create_table "cn_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.text     "industry",     limit: 65535
-    t.text     "plate",        limit: 65535
-    t.text     "category",     limit: 65535
-    t.text     "company_name", limit: 65535
-    t.text     "company_code", limit: 65535
-    t.text     "url",          limit: 65535
-    t.text     "title",        limit: 65535
-    t.text     "context",      limit: 65535
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.text     "industry",     limit: 16777215
+    t.text     "plate",        limit: 16777215
+    t.text     "category",     limit: 16777215
+    t.text     "company_name", limit: 16777215
+    t.text     "company_code", limit: 16777215
+    t.text     "url",          limit: 16777215
+    t.text     "title",        limit: 16777215
+    t.text     "context",      limit: 16777215
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "report_date"
   end
 
 end
