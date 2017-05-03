@@ -41,7 +41,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'rest-client'
 gem 'pdf-reader'
 
-
+gem 'sidekiq'
 #gem 'thin'
 #gem 'sshkit-sudo'
 gem 'parallel'

@@ -1,5 +1,9 @@
 class CnInfosController < ApplicationController
 
+  def index
+
+  end
+
   def create
     @cn_info = CnInfo.new(cn_info_params)
     Rails.logger.info "controller_params #{params}"

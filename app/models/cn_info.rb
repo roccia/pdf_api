@@ -126,7 +126,7 @@ class CnInfo < ActiveRecord::Base
             adjunctUrl = s["adjunctUrl"]
             time = s["announcementTime"]
             unless announcementTitle.include?("摘要")
-              #content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
+              content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
 
               ary << {:industry => industry,
                       :plate => plate,
@@ -136,7 +136,7 @@ class CnInfo < ActiveRecord::Base
                       :code => commpany_code,
                       :name => commpany_name,
                       :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                      #:content => content
+                      :content => content
               }
             end
           end
@@ -153,7 +153,7 @@ class CnInfo < ActiveRecord::Base
 
 
   def read_pdf_ary(ary)
-    Parallel.map(ary, in_processes: 10) { |a|
+    Parallel.map(ary, in_processes: 3) { |a|
       read_pdf(a[:url])
     }
   end
@@ -179,7 +179,7 @@ class CnInfo < ActiveRecord::Base
       self.company_code = s[:code]
       self.company_name = s[:name]
       self.url = s[:url]
-      #self.context = s[:content]
+      self.context = s[:content]
       self.report_date = s[:report_date]
       self.save
     end
