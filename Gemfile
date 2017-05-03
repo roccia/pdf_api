@@ -49,5 +49,5 @@ gem 'pdf-reader'
 
 
 #gem 'thin'
-
+gem 'sshkit-sudo'
 gem 'parallel'

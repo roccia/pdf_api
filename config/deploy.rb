@@ -36,7 +36,7 @@ set :puma_init_active_record, true  # Change to false when not using ActiveRecor
 
 # set :log_level,     :debug
 
-# set :keep_releases, 5
+  set :keep_releases, 5
 
 
 ## Linked Files & Directories (Default None):
