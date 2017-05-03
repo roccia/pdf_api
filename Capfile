@@ -40,6 +40,7 @@ require 'capistrano/rails/migrations'
 require 'capistrano/rails/assets'
 require 'capistrano/nginx'
 require 'capistrano/puma'
+install_plugin Capistrano::Puma
 require 'capistrano/puma/nginx'
 require 'capistrano/upload-config'
 

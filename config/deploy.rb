@@ -1,6 +1,6 @@
 # config valid only for current version of Capistrano
 lock '3.8.1'
-
+server '125.208.9.73', roles: [:web, :app, :db], primary: true
 set :application, 'pdf_api'
 set :repo_url, 'git@github.com:roccia/pdf_api.git'
 set :user,            'roccia'
@@ -10,10 +10,10 @@ set :puma_workers,    0
 # Don't change these unless you know what you're doing
 
 set :pty,             true
-set :use_sudo,        false
+set :use_sudo,        true
 set :stage,           :production
 set :deploy_via,      :remote_cache
-set :deploy_to,       "/home/#{fetch(:user)}/#{fetch(:application)}"
+set :deploy_to,       "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
 set :puma_bind,       "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
 set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"
@@ -41,8 +41,8 @@ set :puma_init_active_record, true  # Change to false when not using ActiveRecor
 
 ## Linked Files & Directories (Default None):
 
-set :linked_files, %w{config/database.yml config/secrets.yml}
-set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+#set :linked_files, %w{config/database.yml config/secrets.yml}
+#set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'
@@ -83,27 +83,8 @@ namespace :deploy do
     end
   end
 
-  desc 'Upload to shared/config'
-  task :upload do
-    on roles (:app) do
-      upload! "config/database.yml", "#{shared_path}/config/database.yml"
-      upload! "config/secrets.yml",  "#{shared_path}/config/secrets.yml"
-    end
-  end
-
-  before :starting,  :check_revision
-  after  :finishing, :compile_assets
-  after  :finishing, :cleanup
-  after  :finishing, :restart
-end
-
-desc "Run rake db:seed on a remote server."
-task :seed do
-  on roles (:app) do
-    within release_path do
-      with rails_env: fetch(:rails_env) do
-        execute :rake, "db:seed"
-      end
-    end
-  end
+  before :starting,     :check_revision
+  after  :finishing,    :compile_assets
+  after  :finishing,    :cleanup
+  after  :finishing,    :restart
 end
