@@ -18,8 +18,8 @@ set :branch, :master
 # property set. Specify the username and a domain or IP for the server.
 # Don't use `:all`, it's a meta role.
 
- role :app, %w{roccia@125.208.9.73}, my_property: :my_value
- role :web, %w{roccia@125.208.9.73}, other_property: :other_value
+ role :app, %w{roccia@125.208.9.73}
+ role :web, %w{roccia@125.208.9.73}
  role :db,  %w{roccia@125.208.9.73}
 
 
