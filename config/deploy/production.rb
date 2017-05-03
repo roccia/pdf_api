@@ -18,15 +18,7 @@ set :branch, :master
 # property set. Specify the username and a domain or IP for the server.
 # Don't use `:all`, it's a meta role.
 
- role :app, %w{roccia@125.208.9.73}
- role :web, %w{roccia@125.208.9.73}
- role :db,  %w{roccia@125.208.9.73}
 
-
-set :rails_env, "production"
-set :puma_env, "production"
-set :puma_config_file, "#{shared_path}/config/puma.rb"
-set :puma_conf, "#{shared_path}/config/puma.rb"
 # Configuration
 # =============
 # You can set any configuration variable like in config/deploy.rb
