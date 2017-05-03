@@ -64,6 +64,10 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-upload-config (0.7.0)
+      capistrano (>= 3.0)
+    capistrano3-nginx (2.1.6)
+      capistrano (>= 3.0.0)
     capistrano3-puma (3.1.0)
       capistrano (~> 3.7)
       capistrano-bundler
@@ -223,9 +227,10 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   byebug
   capistrano
-  capistrano-bundler
   capistrano-rails
   capistrano-rvm
+  capistrano-upload-config
+  capistrano3-nginx
   capistrano3-puma
   listen (~> 3.0.5)
   mysql2 (>= 0.3.18, < 0.5)
