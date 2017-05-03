@@ -140,9 +140,9 @@ class CnInfo < ActiveRecord::Base
               }
             end
           end
-          final_result = {:status => 'success', :msg => ary.uniq}
+          final_result = {:status => 'success'}
         else
-          final_result = {:status => 'fail', :msg => 'failed'}
+          final_result = {:status => 'fail'}
         end
       rescue RestClient::ExceptionWithResponse => err
         Rails.logger.info "#############{err.response}############"
@@ -164,10 +164,7 @@ class CnInfo < ActiveRecord::Base
     io = open(url)
     reader = PDF::Reader.new(io)
     reader.pages.each do |page|
-      content = Base64.encode64(Zlib::Deflate.deflate(page.text))
-      Rails.logger.info " page size ########## #{page.text.size}"
-      Rails.logger.info "content size ########## #{content.size}"
-
+      content =page.text
       content_ary << content
     end
     content_ary
