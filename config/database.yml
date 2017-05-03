@@ -56,6 +56,6 @@ test:
 #
 production:
   <<: *default
-  database: pdf_api_production
-  username: pdf_api
-  password: <%= ENV['PDF_API_DATABASE_PASSWORD'] %>
+  database: cn_infos
+  username: root
+  password: 'Hdza123$%^'
