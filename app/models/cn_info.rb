@@ -52,7 +52,6 @@ class CnInfo < ActiveRecord::Base
   def get_page_num
     response = RestClient.post(URL, @params)
     res = JSON.parse response.body
-    Rails.logger.info '#### first_page #{res}'
     page_num = res["totalAnnouncement"]
     page_num
   end
@@ -87,6 +86,7 @@ class CnInfo < ActiveRecord::Base
               }
             end
           end
+          Rails.logger.info "################### #{ary}"
           save_to_db(ary.uniq)
           final_result = {:status => 'success'}
         else
