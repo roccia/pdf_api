@@ -6,13 +6,8 @@ class CnInfosController < ApplicationController
 
   def create
 
-    s = params[:stock]
-    i = params[:industry]
-    p = params[:plate]
-    r = params[:report]
-    start_time = params[:start_time]
-    end_time = params[:end_time]
-    cn_info = CnInfo.new(s,i,p,r,start_time,end_time)
+
+    cn_info = CnInfo.new(params)
 
     res = cn_info.get_result
 

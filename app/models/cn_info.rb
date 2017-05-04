@@ -10,18 +10,18 @@ class CnInfo < ActiveRecord::Base
   URL = "http://www.cninfo.com.cn/cninfo-new/announcement/query"
   URL_PERFIX = "http://www.cninfo.com.cn"
 
-  def initialize(s, i, p, r, start_time, end_time)
+  def initialize(option={})
          @params = {
-             stock: s,
+             stock: option[:stock],
              searchkey: '',
-             plate: p,
-             category: r,
-             trade: i,
+             plate: option[:plate],
+             category: option[:category],
+             trade: option[:industry],
              column: 'szse_main',
              columnTitle: '历史公告查询',
              pageSize: 50,
              tabName: 'fulltext',
-             seDate: "#{start_time} ~ #{end_time}"
+             seDate: "#{option[:start_time]} ~ #{option[:end_time]}"
          }
   end
 
