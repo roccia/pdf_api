@@ -5,7 +5,7 @@ class CnInfosController < ApplicationController
   end
 
   def create
-    @cn_info = CnInfo.new
+
     Rails.logger.info "controller_params #{params}"
 
     stock = params[:stock]
@@ -14,8 +14,9 @@ class CnInfosController < ApplicationController
     report = params[:report]
     start_time = params[:start_time]
     end_time = params[:end_time]
+    cn_info = CnInfo.new(stock,industry,plate,report,start_time,end_time)
 
-    res = InfosJob.perform_later(@cn_info,stock,industry,plate,report,start_time,end_time)
+    res = InfosJob.perform_later(cn_info)
    # res =  @cn_info.get_result(stock,industry,plate,report,start_time,end_time)
     Rails.logger.info "controller_result #{res}"
     if res[:status] == 0
