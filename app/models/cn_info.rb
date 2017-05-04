@@ -129,6 +129,10 @@ class CnInfo < ActiveRecord::Base
             time = s["announcementTime"]
             unless announcementTitle.include?("摘要")
               content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
+<<<<<<< HEAD
+=======
+
+>>>>>>> 946b35795e175d9c53a8ebaa1d62fb97b1997901
               ary << {:industry => industry,
                       :plate => plate,
                       :category => category,
