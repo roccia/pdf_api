@@ -10,30 +10,28 @@ class CnInfo < ActiveRecord::Base
   URL = "http://www.cninfo.com.cn/cninfo-new/announcement/query"
   URL_PERFIX = "http://www.cninfo.com.cn"
 
-  def initialize(option={})
-         @params = {
-             stock: option[:stock],
-             searchkey: '',
-             plate: option[:plate],
-             category: option[:category],
-             trade: option[:industry],
-             column: 'szse_main',
-             columnTitle: '历史公告查询',
-             pageSize: 50,
-             tabName: 'fulltext',
-             seDate: "#{option[:start_time]} ~ #{option[:end_time]}"
-         }
-  end
 
 
-  def get_result
+  def get_result(option={})
+    @params = {
+        stock: option[:stock],
+        searchkey: '',
+        plate: option[:plate],
+        category: option[:category],
+        trade: option[:industry],
+        column: 'szse_main',
+        columnTitle: '历史公告查询',
+        pageSize: 50,
+        tabName: 'fulltext',
+        seDate: "#{option[:start_time]} ~ #{option[:end_time]}"
+    }
 
     page_num = get_page_num
     return  {:status => 0,:msg => '无数据'} if page_num == 0
     if page_num < 50
       res =  query(p)
       if res[:status] == 'success'
-        {:status => 'success'}
+        {:status => 'success',:msg => res[:info]}
       else
         {:status => 'fail'}
       end
@@ -41,7 +39,7 @@ class CnInfo < ActiveRecord::Base
       pages = (page_num/50.to_f).round
       res = query(pages)
       if  res[:status] == 'success'
-       {:status => 'success'}
+       {:status => 'success', :msg => res[:info]}
       else
         {:status => 'fail'}
       end
@@ -58,6 +56,7 @@ class CnInfo < ActiveRecord::Base
 
 
   def query(page_num)
+    ary = []
     final_result = ''
     @params.merge!(pageNUm:page_num)
       begin
@@ -73,20 +72,20 @@ class CnInfo < ActiveRecord::Base
             time = s["announcementTime"]
             unless announcementTitle.include?("摘要")
               content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
-              self.industry = @params['trade']
-              self.category = @params['category']
-              self.plate = @params['plate']
-              self.title = announcementTitle
-              self.company_code = commpany_code
-              self.company_name = commpany_name
-              self.url = "#{URL_PERFIX}/#{adjunctUrl}"
-              self.context = content
-              self.report_date = Time.at(time/1000)
-              self.save
+              ary << {:industry => @params['trade'],
+                      :plate => @params['plate'],
+                      :category => @params['category'],
+                      :title => announcementTitle,
+                      :report_date => Time.at(time/1000),
+                      :code => commpany_code,
+                      :name => commpany_name,
+                      :url => "#{URL_PERFIX}/#{adjunctUrl}",
+                      :content => content
+              }
             end
           end
 
-          final_result = {:status => 'success' }
+          final_result = {:status => 'success' , :info => ary.uniq}
         else
           final_result = {:status => 'fail'}
         end

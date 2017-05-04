@@ -5,14 +5,16 @@ class CnInfosController < ApplicationController
   end
 
   def create
-    @cn_info = CnInfo.new(params)
+    @cn_info = CnInfo.new
 
-    res = @cn_info.get_result
+    res = @cn_info.get_result(params)
 
     Rails.logger.info "controller_result #{res}"
     if res[:status] == 0
       render  json: {:status=> 'no_data', :msg => '无数据'}
     elsif res[:status] == 'success'
+      Rails.logger.info res[:msg]
+       @cn_info.save_to_db(res[:msg])
       render json: {:status=> 'success', :msg => '爬取成功' }
     else
       render  json: {:status=> 'failed', :msg => '爬取失败'}
