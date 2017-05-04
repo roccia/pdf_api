@@ -7,7 +7,8 @@ class CnInfosController < ApplicationController
   def create
     @cn_info = CnInfo.new
 
-    res = @cn_info.get_result(params)
+   res =  InfosJob.perform_later(@cn_info)
+    #res = @cn_info.get_result(params)
 
     Rails.logger.info "controller_result #{res}"
     if res[:status] == 0
