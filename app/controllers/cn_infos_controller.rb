@@ -5,8 +5,9 @@ class CnInfosController < ApplicationController
   end
 
   def create
-    @cn_info = CnInfo.new(cn_info_params)
-    Rails.logger.info "controller_params #{params[:id]}"
+    @cn_info = CnInfo.new
+    Rails.logger.info "controller_params #{params}"
+    Rails.logger.info " ############## #{@cn_info.id}"
     stock = params[:stock]
     industry = params[:industry]
     plate = params[:plate]
