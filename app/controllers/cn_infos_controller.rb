@@ -14,7 +14,7 @@ class CnInfosController < ApplicationController
     end_time = params[:end_time]
     cn_info = CnInfo.new(stock,industry,plate,report,start_time,end_time)
 
-    res = InfosJob.perform_later(cn_info)
+    res = cn_info.get_result
 
     Rails.logger.info "controller_result #{res}"
     if res[:status] == 0
