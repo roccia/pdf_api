@@ -86,9 +86,8 @@ class CnInfo < ActiveRecord::Base
               }
             end
           end
-          Rails.logger.info "################### #{ary}"
-          save_to_db(ary.uniq)
-          final_result = {:status => 'success'}
+
+          final_result = {:status => 'success' , :info => ary.uniq}
         else
           final_result = {:status => 'fail'}
         end
