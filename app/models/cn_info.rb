@@ -33,7 +33,7 @@ class CnInfo < ActiveRecord::Base
     if page_num < 50
       res =  query(p)
       if res[:status] == 'success'
-        {:status => 'success', :msg => res[:info]}
+        {:status => 'success'}
       else
         {:status => 'fail'}
       end
@@ -41,7 +41,7 @@ class CnInfo < ActiveRecord::Base
       pages = (page_num/50.to_f).round
       res = query(pages)
       if  res[:status] == 'success'
-       {:status => 'success', :msg => res[:info]}
+       {:status => 'success'}
       else
         {:status => 'fail'}
       end
@@ -58,7 +58,6 @@ class CnInfo < ActiveRecord::Base
 
 
   def query(page_num)
-    ary = []
     final_result = ''
     @params.merge!(pageNUm:page_num)
       begin
@@ -74,20 +73,20 @@ class CnInfo < ActiveRecord::Base
             time = s["announcementTime"]
             unless announcementTitle.include?("摘要")
               content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
-              ary << {:industry => @params['trade'],
-                      :plate => @params['plate'],
-                      :category => @params['category'],
-                      :title => announcementTitle,
-                      :report_date => Time.at(time/1000),
-                      :code => commpany_code,
-                      :name => commpany_name,
-                      :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                      :content => content
-              }
+              self.industry = @params['trade']
+              self.category = @params['category']
+              self.plate = @params['plate']
+              self.title = announcementTitle
+              self.company_code = commpany_code
+              self.company_name = commpany_name
+              self.url = "#{URL_PERFIX}/#{adjunctUrl}"
+              self.context = content
+              self.report_date = Time.at(time/1000)
+              self.save
             end
           end
 
-          final_result = {:status => 'success' , :info => ary.uniq}
+          final_result = {:status => 'success' }
         else
           final_result = {:status => 'fail'}
         end
