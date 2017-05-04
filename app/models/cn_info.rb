@@ -33,7 +33,7 @@ class CnInfo < ActiveRecord::Base
     if page_num < 50
       res =  query(p)
       if res[:status] == 'success'
-        {:status => 'success'}
+        {:status => 'success', :msg => res[:info]}
       else
         {:status => 'fail'}
       end
@@ -41,7 +41,7 @@ class CnInfo < ActiveRecord::Base
       pages = (page_num/50.to_f).round
       res = query(pages)
       if  res[:status] == 'success'
-       {:status => 'success'}
+       {:status => 'success', :msg => res[:info]}
       else
         {:status => 'fail'}
       end
