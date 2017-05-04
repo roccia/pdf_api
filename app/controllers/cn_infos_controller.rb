@@ -6,8 +6,6 @@ class CnInfosController < ApplicationController
 
   def create
 
-    Rails.logger.info "controller_params #{params}"
-
     stock = params[:stock]
     industry = params[:industry]
     plate = params[:plate]
@@ -17,7 +15,7 @@ class CnInfosController < ApplicationController
     cn_info = CnInfo.new(stock,industry,plate,report,start_time,end_time)
 
     res = InfosJob.perform_later(cn_info)
-   # res =  @cn_info.get_result(stock,industry,plate,report,start_time,end_time)
+
     Rails.logger.info "controller_result #{res}"
     if res[:status] == 0
       render  json: {:status=> 'no_data', :msg => '无数据'}

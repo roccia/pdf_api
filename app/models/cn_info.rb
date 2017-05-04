@@ -11,28 +11,26 @@ class CnInfo < ActiveRecord::Base
   URL_PERFIX = "http://www.cninfo.com.cn"
 
   def initialize(stock, industry, plate, report, start_time, end_time)
-
+       @stock = stock
+       @industry = industry
+       @plate = plate
+       @report = report
+       @start_time = start_time
+       @end_time = end_time
          @params = {
-             stock: stock,
+             stock: @stock,
              searchkey: '',
-             plate: plate,
-             category: report,
-             trade: industry,
+             plate: @plate,
+             category: @report,
+             trade: @industry,
              column: 'szse_main',
              columnTitle: '历史公告查询',
              pageSize: 50,
              tabName: 'fulltext',
-             seDate: "#{start_time} ~ #{end_time}"
+             seDate: "#{@start_time} ~ #{@end_time}"
          }
   end
 
-  def get_page_num
-    response = RestClient.post(URL, @params)
-    res = JSON.parse response.body
-    Rails.logger.info '#### first_page #{res}'
-    page_num = res["totalAnnouncement"]
-    page_num
-  end
 
   def get_result
 
@@ -55,6 +53,14 @@ class CnInfo < ActiveRecord::Base
       end
     end
 
+  end
+
+  def get_page_num
+    response = RestClient.post(URL, @params)
+    res = JSON.parse response.body
+    Rails.logger.info '#### first_page #{res}'
+    page_num = res["totalAnnouncement"]
+    page_num
   end
 
 
