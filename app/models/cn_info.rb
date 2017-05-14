@@ -109,6 +109,7 @@ class CnInfo < ActiveRecord::Base
 
   def save_to_db(res)
     res.each do |s|
+   if check_db(s[:url]).blank?
       self.industry = s[:industry]
       self.category = s[:category]
       self.plate = s[:plate]
@@ -119,9 +120,15 @@ class CnInfo < ActiveRecord::Base
       self.context = s[:content]
       self.report_date = s[:report_date]
       self.save
+   else
+      {:status => 'exist'}
+     end
     end
   end
 
+  def check_db(url)
+    CnInfo.where(:url => url)
+  end
 
 end
 
