@@ -12,7 +12,7 @@ class CnInfosController < ApplicationController
 
     Rails.logger.info "controller_result #{res}"
     if res[:status] == 0
-      render  json: {:status=> 'no_data', :msg => '无数据'}
+      render  json: {:status=> 'no_data'}
     elsif res[:status] == 'success'
       Rails.logger.info res[:msg]
       rs =  @cn_info.save_to_db(res[:msg])
@@ -22,7 +22,7 @@ class CnInfosController < ApplicationController
         render json: {:status=> 'success' }
       end
     else
-      render  json: {:status=> 'failed', :msg => '爬取失败'}
+      render  json: {:status=> 'failed'}
     end
 
   end
