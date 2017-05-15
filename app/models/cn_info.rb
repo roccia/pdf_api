@@ -30,16 +30,20 @@ class CnInfo < ActiveRecord::Base
     return  {:status => 0,:msg => '无数据'} if page_num == 0
     if page_num < 50
       res =  query(p)
-      if res[:status] == 'success'
-        {:status => 'success',:msg => res[:info]}
+      if res[:status] ==  0
+        {:status => 'exist'}
+      elsif res[:status] == 1
+        {:status => 'success'}
       else
         {:status => 'fail'}
       end
     else
       pages = (page_num/50.to_f).round
       res = query(pages)
-      if  res[:status] == 'success'
-       {:status => 'success', :msg => res[:info]}
+      if res[:status] ==  0
+        {:status => 'exist'}
+      elsif res[:status] == 1
+        {:status => 'success'}
       else
         {:status => 'fail'}
       end
@@ -84,10 +88,14 @@ class CnInfo < ActiveRecord::Base
               }
             end
           end
-
-          final_result = {:status => 'success' , :info => ary.uniq}
+         db_rs = save_to_db(ary.uniq)
+          if db_rs[:status] == 0
+            final_result = {:status => 0}
+          else
+          final_result = {:status => 1 }
+          end
         else
-          final_result = {:status => 'fail'}
+          final_result = {:status => -1 }
         end
       rescue RestClient::ExceptionWithResponse => err
         Rails.logger.info "#############{err.response}############"
@@ -112,27 +120,25 @@ class CnInfo < ActiveRecord::Base
   end
 
   def save_to_db(res)
-    res.each do |s|
-   if check_db(s[:url]).blank?
-      self.industry = s[:industry]
-      self.category = s[:category]
-      self.plate = s[:plate]
-      self.title = s[:title]
-      self.company_code = s[:code]
-      self.company_name = s[:name]
-      self.url = s[:url]
-      self.context = s[:content]
-      self.report_date = s[:report_date]
-      self.save
-   else
-      {:status => 'exist'}
-     end
+    if  CnInfo.where(:url => res.first[:url]).exists?
+      {:status => 0}
+    else
+      res.each do |s|
+        self.industry = s[:industry]
+        self.category = s[:category]
+        self.plate = s[:plate]
+        self.title = s[:title]
+        self.company_code = s[:code]
+        self.company_name = s[:name]
+        self.url = s[:url]
+        self.context = s[:content]
+        self.report_date = s[:report_date]
+        self.save
+        {:status => 1}
+      end
     end
   end
 
-  def check_db(url)
-    CnInfo.where(:url => url)
-  end
 
 end
 

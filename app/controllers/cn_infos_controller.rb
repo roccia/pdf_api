@@ -11,16 +11,11 @@ class CnInfosController < ApplicationController
     res = @cn_info.get_result(params)
 
     Rails.logger.info "controller_result #{res}"
-    if res[:status] == 0
-      render  json: {:status=> 'no_data'}
-    elsif res[:status] == 'success'
-      Rails.logger.info res[:msg]
-      rs =  @cn_info.save_to_db(res[:msg])
-      if rs[:status] == 'exist'
-        render json: {:status=> 'data_exist'}
-      else
-        render json: {:status=> 'success' }
-      end
+    render  json: {:status=> 'no_data'} if res[:status] == 0
+    if res[:status] == 'success'
+      render json: {:status=> 'success' }
+    elsif res[:status] == 'exist'
+      render json: {:status=> 'data_exist'}
     else
       render  json: {:status=> 'failed'}
     end
