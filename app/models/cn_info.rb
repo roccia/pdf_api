@@ -63,6 +63,7 @@ class CnInfo < ActiveRecord::Base
         response = RestClient.post(URL, @params)
         rs = JSON.parse response
         self.context = rs
+        self.stock_num = @params['stock']
         self.save
         Rails.logger.info "Response ###############  #{rs}"
         if rs.present?
