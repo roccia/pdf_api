@@ -98,8 +98,6 @@ class CnInfo < ActiveRecord::Base
     final_result
   end
 
-
-
 end
 
 
