@@ -12,10 +12,10 @@
 default: &default
   adapter: mysql2
   encoding: utf8
-  database: PDF
+  database: cn_infos
   pool: 5
-  username: meiuser
-  password: '_m3iu$er_'
+  username: root
+  password: 'Hdza123$%^'
   host: localhost
   port: 3306
   encoding: utf8mb4
@@ -26,7 +26,7 @@ default: &default
 
 development:
   <<: *default
-  database: PDF
+  database: cn_infos
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
