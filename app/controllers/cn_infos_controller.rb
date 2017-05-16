@@ -10,6 +10,10 @@ class CnInfosController < ApplicationController
      Rails.logger.info "controller_result #{res}"
     render  json: {:status=> 'no_data'} if res[:status] == 0
     if res[:status] == 'success'
+      articles = Article.where(:cn_info_id => @cn_info.id)
+      articles.each do |a|
+        a.read_pdf(a.url)
+      end
       render json: {:status=> 'success' }
     elsif res[:status] == 'exist'
       render json: {:status=> 'data_exist'}
