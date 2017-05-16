@@ -7,13 +7,13 @@ class CnInfosController < ApplicationController
   def create
     @cn_info = CnInfo.new
 
-   #res =  InfosJob.perform_later(@cn_info)
     res = @cn_info.get_result(params)
 
-    Rails.logger.info "controller_result #{res}"
+     Rails.logger.info "controller_result #{res}"
     render  json: {:status=> 'no_data'} if res[:status] == 0
     if res[:status] == 'success'
       render json: {:status=> 'success' }
+      ArticleJob.perform_later(@cn_info.id)
     elsif res[:status] == 'exist'
       render json: {:status=> 'data_exist'}
     else

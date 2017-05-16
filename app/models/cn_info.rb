@@ -5,11 +5,9 @@ require 'base64'
 
 
 class CnInfo < ActiveRecord::Base
-  validates_uniqueness_of :url
-
+  has_many :articles
   URL = "http://www.cninfo.com.cn/cninfo-new/announcement/query"
   URL_PERFIX = "http://www.cninfo.com.cn"
-
 
 
   def get_result(option={})
@@ -25,7 +23,6 @@ class CnInfo < ActiveRecord::Base
         tabName: 'fulltext',
         seDate: "#{option[:start_time]} ~ #{option[:end_time]}"
     }
-
     page_num = get_page_num
     return  {:status => 0,:msg => '无数据'} if page_num == 0
     if page_num < 50
@@ -33,7 +30,7 @@ class CnInfo < ActiveRecord::Base
       if res[:status] ==  0
         {:status => 'exist'}
       elsif res[:status] == 1
-        {:status => 'success'}
+        {:status => 'success'  }
       else
         {:status => 'fail'}
       end
@@ -43,7 +40,7 @@ class CnInfo < ActiveRecord::Base
       if res[:status] ==  0
         {:status => 'exist'}
       elsif res[:status] == 1
-        {:status => 'success'}
+        {:status => 'success' }
       else
         {:status => 'fail'}
       end
@@ -58,7 +55,6 @@ class CnInfo < ActiveRecord::Base
     page_num
   end
 
-
   def query(page_num)
     ary = []
     final_result = ''
@@ -66,33 +62,34 @@ class CnInfo < ActiveRecord::Base
       begin
         response = RestClient.post(URL, @params)
         rs = JSON.parse response
+        self.context = rs
+        self.save
         Rails.logger.info "Response ###############  #{rs}"
         if rs.present?
-          rs["announcements"].each do |s|
-            announcementTitle = s["announcementTitle"]
-            commpany_code = s["secCode"]
-            commpany_name = s["secName"]
-            adjunctUrl = s["adjunctUrl"]
-            time = s["announcementTime"]
-            unless announcementTitle.include?("摘要")
-              content = read_pdf("#{URL_PERFIX}/#{adjunctUrl}")
-              ary << {:industry => @params['trade'],
-                      :plate => @params['plate'],
-                      :category => @params['category'],
-                      :title => announcementTitle,
-                      :report_date => Time.at(time/1000),
-                      :code => commpany_code,
-                      :name => commpany_name,
-                      :url => "#{URL_PERFIX}/#{adjunctUrl}",
-                      :content => content
-              }
-            end
-          end
-         db_rs = save_to_db(ary.uniq)
-          if db_rs[:status] == 0
+          last_url = rs["announcements"].last["adjunctUrl"]
+          if  Article.where(:url => "#{URL_PERFIX}/#{last_url}").exists?
             final_result = {:status => 0}
           else
-          final_result = {:status => 1 }
+            rs["announcements"].each do |s|
+              announcementTitle = s["announcementTitle"]
+              commpany_code = s["secCode"]
+              commpany_name = s["secName"]
+              adjunctUrl = s["adjunctUrl"]
+              time = s["announcementTime"]
+              unless announcementTitle.include?("摘要")
+                ary << {:industry => @params['trade'],
+                        :plate => @params['plate'],
+                        :category => @params['category'],
+                        :title => announcementTitle,
+                        :report_date => Time.at(time/1000),
+                        :company_code => commpany_code,
+                        :company_name => commpany_name,
+                        :url => "#{URL_PERFIX}/#{adjunctUrl}",
+                }
+              end
+            end
+            self.articles.create!(ary.uniq)
+            final_result = {:status => 1 }
           end
         else
           final_result = {:status => -1 }
@@ -103,41 +100,6 @@ class CnInfo < ActiveRecord::Base
     final_result
   end
 
-
-  def read_pdf(url)
-    content_ary = []
-    io = open(url)
-    begin
-    reader = PDF::Reader.new(io)
-    reader.pages.each do |page|
-      content =page.text
-      content_ary << content
-    end
-    rescue PDF::Reader::MalformedPDFError =>err
-    Rails.logger.info "#############{err.response}############"
-    end
-    content_ary
-  end
-
-  def save_to_db(res)
-    if  CnInfo.where(:url => res.first[:url]).exists?
-      {:status => 0}
-    else
-      res.each do |s|
-        self.industry = s[:industry]
-        self.category = s[:category]
-        self.plate = s[:plate]
-        self.title = s[:title]
-        self.company_code = s[:code]
-        self.company_name = s[:name]
-        self.url = s[:url]
-        self.context = s[:content]
-        self.report_date = s[:report_date]
-        self.save
-        {:status => 1}
-      end
-    end
-  end
 
 
 end
