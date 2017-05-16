@@ -30,7 +30,7 @@ class CnInfo < ActiveRecord::Base
       if res[:status] ==  0
         {:status => 'exist'}
       elsif res[:status] == 1
-        {:status => 'success'  }
+        {:status => 'success' , :msg => res[:info] }
       else
         {:status => 'fail'}
       end
@@ -40,7 +40,7 @@ class CnInfo < ActiveRecord::Base
       if res[:status] ==  0
         {:status => 'exist'}
       elsif res[:status] == 1
-        {:status => 'success' }
+        {:status => 'success' ,:msg => res[:info]}
       else
         {:status => 'fail'}
       end
@@ -62,9 +62,6 @@ class CnInfo < ActiveRecord::Base
       begin
         response = RestClient.post(URL, @params)
         rs = JSON.parse response
-        self.context = rs
-        self.stock_num = @params[:stock]
-        self.save
         Rails.logger.info "Response ###############  #{rs}"
         if rs.present?
           last_url = rs["announcements"].last["adjunctUrl"]
@@ -90,7 +87,7 @@ class CnInfo < ActiveRecord::Base
               end
             end
             self.articles.create!(ary.uniq)
-            final_result = {:status => 1 }
+            final_result = {:status => 1 , :info => ary.uniq}
           end
         else
           final_result = {:status => -1 }
