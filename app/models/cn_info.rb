@@ -90,6 +90,7 @@ class CnInfo < ActiveRecord::Base
               end
             end
             self.articles.create!(ary.uniq)
+            ArticleJob.perform_later(self.id)
             final_result = {:status => 1 }
           end
         else
