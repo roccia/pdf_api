@@ -6,14 +6,13 @@ class CnInfosController < ApplicationController
 
   def create
     @cn_info = CnInfo.new
+
     res = @cn_info.get_result(params)
+
      Rails.logger.info "controller_result #{res}"
     render  json: {:status=> 'no_data'} if res[:status] == 0
     if res[:status] == 'success'
-      articles = Article.where(:cn_info_id => @cn_info.id)
-      articles.each do |a|
-        a.read_pdf(a.url)
-      end
+      ArticleJob.perform_later(@cn_info.id)
       render json: {:status=> 'success' }
     elsif res[:status] == 'exist'
       render json: {:status=> 'data_exist'}

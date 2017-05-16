@@ -90,7 +90,6 @@ class CnInfo < ActiveRecord::Base
               end
             end
             self.articles.create!(ary.uniq)
-
             final_result = {:status => 1 }
           end
         else
