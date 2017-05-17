@@ -10,7 +10,7 @@ class CnInfo < ActiveRecord::Base
   URL_PERFIX = "http://www.cninfo.com.cn"
 
 
-  def self.get_result(option={})
+  def get_result(option={})
     @params = {
         stock: option[:stock],
         searchkey: '',
@@ -63,7 +63,7 @@ class CnInfo < ActiveRecord::Base
         response = RestClient.post(URL, @params)
         rs = JSON.parse response
         self.context = rs
-        self.stock_num = @params['stock']
+        self.stock_num = @params[:stock]
         self.save
         Rails.logger.info "Response ###############  #{rs}"
         if rs.present?
@@ -90,8 +90,9 @@ class CnInfo < ActiveRecord::Base
               end
             end
             self.articles.create!(ary.uniq)
-            final_result = {:status => 1}
             ArticleJob.perform_later(self.id)
+            final_result = {:status => 1}
+
           end
         else
           final_result = {:status => -1 }

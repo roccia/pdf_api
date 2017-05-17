@@ -1,7 +1,7 @@
 class Article < ApplicationRecord
    belongs_to :cn_info
 
-   def self.read_pdf(url)
+   def read_pdf(url)
     content_ary = []
     io = open(url)
     begin
