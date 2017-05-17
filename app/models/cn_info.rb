@@ -23,10 +23,10 @@ class CnInfo < ActiveRecord::Base
         tabName: 'fulltext',
         seDate: "#{option[:start_time]} ~ #{option[:end_time]}"
     }
-    page_num = get_page_num
+    page_num = self.get_page_num
     return  {:status => 0,:msg => '无数据'} if page_num == 0
     if page_num < 50
-      res =  query(p)
+      res =  self.query_pdf(p)
       if res[:status] ==  0
         {:status => 'exist'}
       elsif res[:status] == 1
@@ -36,7 +36,7 @@ class CnInfo < ActiveRecord::Base
       end
     else
       pages = (page_num/50.to_f).round
-      res = query(pages)
+      res = self.query_pdf(pages)
       if res[:status] ==  0
         {:status => 'exist'}
       elsif res[:status] == 1
@@ -48,14 +48,14 @@ class CnInfo < ActiveRecord::Base
 
   end
 
-  def get_page_num
+  def self.get_page_num
     response = RestClient.post(URL, @params)
     res = JSON.parse response.body
     page_num = res["totalAnnouncement"]
     page_num
   end
 
-  def query(page_num)
+  def self.query_pdf(page_num)
     ary = []
     final_result = ''
     @params.merge!(pageNUm:page_num)
@@ -63,6 +63,7 @@ class CnInfo < ActiveRecord::Base
         response = RestClient.post(URL, @params)
         rs = JSON.parse response
         self.context = rs
+        self.stock_num = @params['stock']
         self.save
         Rails.logger.info "Response ###############  #{rs}"
         if rs.present?
@@ -90,6 +91,7 @@ class CnInfo < ActiveRecord::Base
             end
             self.articles.create!(ary.uniq)
             final_result = {:status => 1 , :info => ary.uniq}
+            ArticleJob.perform_later(self.id)
           end
         else
           final_result = {:status => -1 }
