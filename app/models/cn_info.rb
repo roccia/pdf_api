@@ -62,6 +62,8 @@ class CnInfo < ActiveRecord::Base
       begin
         response = RestClient.post(URL, @params)
         rs = JSON.parse response
+        self.context = rs
+        self.save
         Rails.logger.info "Response ###############  #{rs}"
         if rs.present?
           last_url = rs["announcements"].last["adjunctUrl"]

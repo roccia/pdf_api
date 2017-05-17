@@ -12,9 +12,9 @@ class CnInfosController < ApplicationController
      Rails.logger.info "controller_result #{params['stock']}"
     render  json: {:status=> 'no_data'} if res[:status] == 0
     if res[:status] == 'success'
-      # @cn_info.stock_num = params['stock']
+       @cn_info.stock_num = params['stock']
       # @cn_info.context = res[:msg]
-      # @cn_info.save
+       @cn_info.save
       # ArticleJob.perform_later(@cn_info.id)
       render json: {:status=> 'success' }
     elsif res[:status] == 'exist'
