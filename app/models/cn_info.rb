@@ -23,24 +23,24 @@ class CnInfo < ActiveRecord::Base
         tabName: 'fulltext',
         seDate: "#{option[:start_time]} ~ #{option[:end_time]}"
     }
-    page_num = self.get_page_num
+    page_num = get_page_num
     return  {:status => 0,:msg => '无数据'} if page_num == 0
     if page_num < 50
-      res =  self.query_pdf(p)
+      res =  query_pdf(p)
       if res[:status] ==  0
         {:status => 'exist'}
       elsif res[:status] == 1
-        {:status => 'success' , :msg => res[:info] }
+        {:status => 'success' }
       else
         {:status => 'fail'}
       end
     else
       pages = (page_num/50.to_f).round
-      res = self.query_pdf(pages)
+      res = query_pdf(pages)
       if res[:status] ==  0
         {:status => 'exist'}
       elsif res[:status] == 1
-        {:status => 'success' ,:msg => res[:info]}
+        {:status => 'success' }
       else
         {:status => 'fail'}
       end
@@ -90,7 +90,7 @@ class CnInfo < ActiveRecord::Base
               end
             end
             self.articles.create!(ary.uniq)
-            final_result = {:status => 1 , :info => ary.uniq}
+            final_result = {:status => 1}
             ArticleJob.perform_later(self.id)
           end
         else
