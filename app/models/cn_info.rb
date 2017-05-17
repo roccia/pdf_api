@@ -10,7 +10,7 @@ class CnInfo < ActiveRecord::Base
   URL_PERFIX = "http://www.cninfo.com.cn"
 
 
-  def get_result(option={})
+  def self.get_result(option={})
     @params = {
         stock: option[:stock],
         searchkey: '',
@@ -48,14 +48,14 @@ class CnInfo < ActiveRecord::Base
 
   end
 
-  def self.get_page_num
+  def get_page_num
     response = RestClient.post(URL, @params)
     res = JSON.parse response.body
     page_num = res["totalAnnouncement"]
     page_num
   end
 
-  def self.query_pdf(page_num)
+  def query_pdf(page_num)
     ary = []
     final_result = ''
     @params.merge!(pageNUm:page_num)
