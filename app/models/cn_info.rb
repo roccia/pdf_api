@@ -11,7 +11,7 @@ class CnInfo < ActiveRecord::Base
 
 
   def get_result(option={})
-    if option[:start_time].blank? && option[:end_time].blank?
+    if option[:start_time].blank? || option[:end_time].blank?
        return {:status=>-2 }
     end
       @params = {
