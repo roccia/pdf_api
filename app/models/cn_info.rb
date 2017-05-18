@@ -11,7 +11,10 @@ class CnInfo < ActiveRecord::Base
 
 
   def get_result(option={})
-    @params = {
+    if option[:start_time].blank? && option[:end_time].blank?
+       return {:status=>-2 }
+    end
+      @params = {
         stock: option[:stock],
         searchkey: '',
         plate: option[:plate],
@@ -23,7 +26,7 @@ class CnInfo < ActiveRecord::Base
         tabName: 'fulltext',
         seDate: "#{option[:start_time]} ~ #{option[:end_time]}"
     }
-    page_num = get_page_num
+     page_num = get_page_num
     return  {:status => 0,:msg => '无数据'} if page_num == 0
     if page_num < 50
       res =  query_pdf(p)
