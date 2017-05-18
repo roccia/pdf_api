@@ -14,6 +14,13 @@ class CnInfo < ActiveRecord::Base
     if option[:start_time].blank? || option[:end_time].blank?
        return {:status=>-2 }
     end
+
+    set_date = ''
+    if option[:start_time] == option[:end_time]
+       set_date = option[:start_time]
+    else
+       set_date = option[:start_time] == option[:end_time]
+    end
       @params = {
         stock: option[:stock],
         searchkey: '',
@@ -24,7 +31,7 @@ class CnInfo < ActiveRecord::Base
         columnTitle: '历史公告查询',
         pageSize: 50,
         tabName: 'fulltext',
-        seDate: "#{option[:start_time]} ~ #{option[:end_time]}"
+        seDate: set_date
     }
      page_num = get_page_num
     return  {:status => 0,:msg => '无数据'} if page_num == 0
