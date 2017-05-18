@@ -10,20 +10,18 @@ class CnInfosController < ApplicationController
     res = @cn_info.get_result(params)
 
      Rails.logger.info "controller_result #{res}"
-    case res[:status]
-      when res[:status] == -2
+
+      if res[:status] == -2
         render  json: {:status=> '请传入时间'}
-      when res[:status] == 0
+      elsif res[:status] == 0
         render  json: {:status=> 'no_data'}
-      when res[:status] == 'success'
+      elsif res[:status] == 'success'
         render json: {:status=> 'success' }
-      when res[:status] == 'exist'
+      elsif res[:status] == 'exist'
         render json: {:status=> 'data_exist'}
-      when res[:status] == 'fail'
-        render  json: {:status=> 'failed'}
-
-    end
-
+      else
+        render json: {:status=> 'failed'}
+      end
 
   end
 
