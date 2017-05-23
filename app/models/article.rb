@@ -2,9 +2,10 @@ class Article < ApplicationRecord
    belongs_to :cn_info
 
    def read_pdf(url)
-    content_ary = []
-    io = open(url)
-    begin
+     content_ary = []
+     io = open(url)
+     IO.copy_stream(io,  "/home/roccia/pdf_data/#{Time.now}_#{download.base_uri.to_s.split('/')[-1]}")
+     begin
       reader = PDF::Reader.new(io)
       reader.pages.each do |page|
         content = page.text
