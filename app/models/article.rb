@@ -4,7 +4,8 @@ class Article < ApplicationRecord
    def read_pdf(url)
      content_ary = []
      io = open(url)
-     IO.copy_stream(io,  "/home/roccia/pdf_data/#{Time.now}_#{io.base_uri.to_s.split('/')[-1]}")
+     file = IO.copy_stream(io,  "/home/roccia/pdf_data/#{Time.now}_#{io.base_uri.to_s.split('/')[-1]}")
+      Rails.logger.info file
      begin
       reader = PDF::Reader.new(io)
       reader.pages.each do |page|
