@@ -1,10 +1,10 @@
+require 'open-uri'
 class Article < ApplicationRecord
    belongs_to :cn_info
 
    def read_pdf(url)
      content_ary = []
-     io =  Net::HTTP.get_response(URI.parse(url ))
-
+     io =  open(url)
      begin
       reader = PDF::Reader.new(io)
       reader.pages.each do |page|
