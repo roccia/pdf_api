@@ -19,7 +19,7 @@ class CnInfo < ActiveRecord::Base
     if option[:start_time] == option[:end_time]
        set_date = option[:start_time]
     else
-       set_date = option[:start_time] == option[:end_time]
+       set_date = "#{option[:start_time]} ~ #{option[:end_time]}"
     end
       @params = {
         stock: option[:stock],
