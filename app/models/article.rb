@@ -8,12 +8,14 @@ class Article < ApplicationRecord
     begin
       reader = PDF::Reader.new(io)
     rescue PDF::Reader::MalformedPDFError => err
-      self.update(:content => err)
+      self.content = err
     else
       reader.pages.each do |page|
         content_ary << page.text
       end
-      self.update(:content => content_ary)
+      self.content = content_ary
+    ensure
+      self.save
     end
 
   end
