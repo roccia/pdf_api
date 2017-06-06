@@ -1,20 +1,21 @@
 require 'open-uri'
 class Article < ApplicationRecord
-   belongs_to :cn_info
+  belongs_to :cn_info
 
-   def read_pdf(url)
-     content_ary = []
-     io =  open(url)
-     begin
+  def read_pdf(url)
+    content_ary = []
+    io = open(url)
+    begin
       reader = PDF::Reader.new(io)
+    rescue PDF::Reader::MalformedPDFError => err
+      self.update(:content => err)
+    else
       reader.pages.each do |page|
-        content = page.text
-        content_ary << content
+        content_ary << page.text
       end
-    rescue PDF::Reader::MalformedPDFError =>err
-      Rails.logger.info "#############{err.response}############"
+      self.update(:content => content_ary)
     end
-    self.update(:content => content_ary)
+
   end
 
 end
