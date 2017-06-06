@@ -12,7 +12,7 @@ class Article < ApplicationRecord
       end
       self.content = content_ary
     rescue PDF::Reader::MalformedPDFError => err
-      self.content = err
+        self.content = '文件不可读取'
     ensure
       self.save
     end
