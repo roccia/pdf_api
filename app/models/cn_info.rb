@@ -62,6 +62,9 @@ class CnInfo < ActiveRecord::Base
     response = RestClient.post(URL, @params)
     res = JSON.parse response.body
     page_num = res["totalAnnouncement"]
+    Rails.logger.info '#######################'
+    Rails.logger.info res["announcements"].size
+    Rails.logger.info page_num
     page_num
   end
 
