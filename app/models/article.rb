@@ -1,7 +1,6 @@
 require 'open-uri'
 class Article < ApplicationRecord
    belongs_to :cn_info
-   validates_uniqueness_of :content
 
    def read_pdf(url)
      content_ary = []
