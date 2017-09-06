@@ -10,12 +10,9 @@ class Article < ApplicationRecord
       reader.pages.each do |page|
         content_ary << page.text
       end
-      self.content = content_ary
+       update(content:content_ary)
     rescue PDF::Reader::MalformedPDFError => err
-        p err
-        self.content = '文件不可读取'
-    ensure
-      self.save
+        update(content:"文件不可读取#{err}")
     end
 
   end
