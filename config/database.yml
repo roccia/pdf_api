@@ -25,7 +25,19 @@ default: &default
   timeout: 5000
 
 development:
-  <<: *default
+  adapter: mysql2
+  encoding: utf8
+  database: cn_infos
+  pool: 5
+  username: meiuser
+  password: _m3iu$er_
+  host: localhost
+  port: 3306
+  encoding: utf8mb4
+  collation: utf8mb4_unicode_ci
+  reconnect: true
+  pool: 5
+  timeout: 5000
   database: cn_infos
 
 # Warning: The database defined as "test" will be erased and

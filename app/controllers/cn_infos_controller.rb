@@ -5,7 +5,7 @@ class CnInfosController < ApplicationController
   end
 
   def create
-    @cn_info = CnInfo.new
+    @cn_info = CnInfo.find_or_create_by(stock_num:params[:stock])
 
     res = @cn_info.get_result(params)
 
@@ -16,7 +16,8 @@ class CnInfosController < ApplicationController
       elsif res[:status] == 0
         render  json: {:status=> 'no_data'}
       elsif res[:status] == 'success'
-        render json: {:status=> 'success' }
+         ArticleJob.perform_later(@cn_info.id)
+         render json: {:status=> 'success' }
       elsif res[:status] == 'exist'
         render json: {:status=> 'data_exist'}
       else

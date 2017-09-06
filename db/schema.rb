@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170516033642) do
+ActiveRecord::Schema.define(version: 20170517073009) do
 
   create_table "articles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text     "content",      limit: 4294967295
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20170516033642) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.integer  "page_num"
+    t.string   "stock_num"
   end
 
 end
