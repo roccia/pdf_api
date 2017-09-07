@@ -12,7 +12,7 @@ class Article < ApplicationRecord
       end
        update(content:content_ary)
     rescue PDF::Reader::MalformedPDFError => err
-        update(content:"文件不可读取#{err}")
+        update(error_info:"文件不可读取#{err}")
     end
 
   end
