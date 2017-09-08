@@ -86,8 +86,8 @@ class CnInfo < ActiveRecord::Base
           commpany_code = s["secCode"]
           commpany_name = s["secName"]
           adjunctUrl = s["adjunctUrl"]
-          url = "#{URL_PERFIX}/#{adjunctUrl}",
-              time = s["announcementTime"]
+          url = "#{URL_PERFIX}/#{adjunctUrl}"
+          time = s["announcementTime"]
           unless announcementTitle.include?("摘要")
             attr = {industry: @params['trade'],
                     plate: @params['plate'],
@@ -99,6 +99,7 @@ class CnInfo < ActiveRecord::Base
                     url: url
 
             }
+            p attr
             articles.where(url: url).first_or_create(attr)
           end
           final_result = {:status => 1}
