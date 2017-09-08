@@ -36,22 +36,4 @@ set :pty,  false
 # set :keep_releases, 5
 
 
-namespace :deploy do
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
-
-  after :restart, :restart_sidekiq do
-    on roles(:sidekiq), in: :groups, limit: 3, wait: 1 do
-      pid_file = '/data/meiweb/current/tmp/pids/sidekiq-0.pid'
-      execute "if [ -f #{pid_file} ] && ps -p `cat #{pid_file}`; then kill -TERM `cat #{pid_file}`; fi"
-    end
-  end
-
-end

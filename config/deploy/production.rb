@@ -8,7 +8,7 @@
 # server "db.example.com", user: "deploy", roles: %w{db}
 set :rails_env, 'production'
 set :branch, 'master'
-set :sidekiq_role, :sidekiq
+#set :sidekiq_role, :sidekiq
 
 
 # role-based syntax
@@ -22,7 +22,7 @@ set :sidekiq_role, :sidekiq
 role :app, %w{roccia@103.53.211.211}, my_property: :my_value
 role :web, %w{roccia@103.53.211.211}, other_property: :other_value
 role :db,  %w{roccia@103.53.211.211}
-role :sidekiq, %w{roccia@103.53.211.211}
+#role :sidekiq, %w{roccia@103.53.211.211}
 
 
 
