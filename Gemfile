@@ -43,7 +43,7 @@ gem 'pdf-reader'
 
 gem 'sidekiq'
 #gem 'thin'
-#gem 'sshkit-sudo'
+gem 'sshkit-sudo'
 gem 'parallel'
 
 gem 'capistrano', '~> 3.7', '>= 3.7.1'
