@@ -25,7 +25,7 @@ append :linked_files, "config/database.yml", "config/secrets.yml"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
-
+set :pty,  false
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
@@ -35,3 +35,23 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+
+namespace :deploy do
+
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
+    end
+  end
+
+  after :restart, :restart_sidekiq do
+    on roles(:sidekiq), in: :groups, limit: 3, wait: 1 do
+      pid_file = '/data/meiweb/current/tmp/pids/sidekiq-0.pid'
+      execute "if [ -f #{pid_file} ] && ps -p `cat #{pid_file}`; then kill -TERM `cat #{pid_file}`; fi"
+    end
+  end
+
+end
