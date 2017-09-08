@@ -66,6 +66,9 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-sidekiq (0.5.4)
+      capistrano
+      sidekiq (>= 3.4)
     case_transform (0.2)
       activesupport
     concurrent-ruby (1.0.5)
@@ -230,6 +233,7 @@ DEPENDENCIES
   capistrano-passenger (~> 0.2.0)
   capistrano-rails (~> 1.2)
   capistrano-rvm
+  capistrano-sidekiq
   listen (~> 3.0.5)
   mysql2 (>= 0.3.18, < 0.5)
   parallel
