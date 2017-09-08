@@ -16,11 +16,8 @@ class CnInfosController < ApplicationController
       elsif res[:status] == 0
         render  json: {:status=> 'no_data'}
       elsif res[:status] == 'success'
-        ids =  @cn_info.articles.pluck(:id)
-        ids.each do |id|
-          DownloadJob.perform_later(id)
-        end
-        render json: {:status=> 'success' }
+        ArticleJob.perform_later(@cn_info.id)
+         render json: {:status=> 'success' }
       elsif res[:status] == 'exist'
         render json: {:status=> 'data_exist'}
       else
