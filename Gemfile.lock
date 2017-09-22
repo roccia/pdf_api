@@ -82,6 +82,8 @@ GEM
     domain_name (0.5.20170223)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
+    et-orbi (1.0.5)
+      tzinfo
     ffi (1.9.18)
     ffi (1.9.18-java)
     ffi (1.9.18-x64-mingw32)
@@ -184,11 +186,16 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     ruby-rc4 (0.1.5)
+    rufus-scheduler (3.4.2)
+      et-orbi (~> 1.0)
     sidekiq (5.0.0)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (~> 3.3, >= 3.3.3)
+    sidekiq-cron (0.6.3)
+      rufus-scheduler (>= 3.3.0)
+      sidekiq (>= 4.2.1)
     spring (2.0.1)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -250,6 +257,7 @@ DEPENDENCIES
   redis (~> 3.0)
   rest-client
   sidekiq
+  sidekiq-cron (~> 0.6.3)
   spring
   spring-watcher-listen (~> 2.0.0)
   sshkit-sudo

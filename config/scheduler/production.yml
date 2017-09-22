@@ -1,0 +1,5 @@
+daily_download_job:
+  cron: "1 0,1 * * *"
+  class: "DailyDownloadJob"
+  queue: default
+  desc: "每天凌晨0点及1点的1分 两次执行download job，防止某一次定时出现问题没有执行"

@@ -71,14 +71,12 @@ class CnInfo < ActiveRecord::Base
   end
 
   def query_pdf(page_num)
-    ary = []
     final_result = ''
     @params.merge!(pageNUm: page_num)
     begin
       response = RestClient.post(URL, @params)
       rs = JSON.parse response
       update(context: rs, stock_num: @params[:stock], page_num: page_num)
-
       Rails.logger.info "Response ###############  #{rs}"
       if rs.present?
         rs["announcements"].each do |s|

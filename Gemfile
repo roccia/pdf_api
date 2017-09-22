@@ -42,6 +42,7 @@ gem 'rest-client'
 gem 'pdf-reader'
 
 gem 'sidekiq'
+gem "sidekiq-cron", "~> 0.6.3"
 #gem 'thin'
 gem 'sshkit-sudo'
 gem 'parallel'
