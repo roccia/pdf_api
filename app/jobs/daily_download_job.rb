@@ -1,4 +1,4 @@
-class DailyDownLoadJob < ActiveJob::Base
+class DailyDownloadJob < ActiveJob::Base
   queue_as :default
 
   def perform
