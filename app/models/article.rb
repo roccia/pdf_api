@@ -20,7 +20,7 @@ class Article < ApplicationRecord
     self.save
   end
 
-  def run
+  def self.run
     Article.where.not(url: nil).where(content: nil).first(100).each do |a|
       begin
         a.read_pdf(a.url)
